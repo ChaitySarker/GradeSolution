@@ -25,7 +25,7 @@ jobs:
         run: dotnet restore GradeSolution.sln
 
       - name: Test
-        run: dotnet test GradeSolution.sln -c Release --no-build
+        run: dotnet test GradeSolution.sln -c Release
 
   build:
     needs: test
