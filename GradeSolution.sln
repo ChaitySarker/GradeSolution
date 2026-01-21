@@ -17,8 +17,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{02EA
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{B27A24D0-3888-4891-9EE3-A6CA6B5D3CA0}"
 	ProjectSection(SolutionItems) = preProject
+		deploy8-ci-cd.yml = deploy8-ci-cd.yml
 		dotnet8-cicd.yml = dotnet8-cicd.yml
 	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Frontend", "Frontend", "{EF3337F8-DC03-4304-A3FD-05C91D765327}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,5 +1,5 @@
-﻿using GradeSystem;
-using Xunit;
+﻿using Xunit;
+using GradeSystem;
 
 namespace GradeSystemTest
 {
