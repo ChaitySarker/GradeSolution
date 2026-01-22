@@ -1,4 +1,4 @@
-﻿name: SonarCloud
+﻿name: SonarCloud Analysis
 
 on:
   push:
@@ -49,7 +49,7 @@ jobs:
           /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
 
       - name: Build
-        run: dotnet build GradeSolution.sln --no-incremental
+        run: dotnet build GradeSolution.sln
 
       - name: Sonar End
         run: |
