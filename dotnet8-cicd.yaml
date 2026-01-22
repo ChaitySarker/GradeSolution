@@ -46,7 +46,7 @@ jobs:
         run: dotnet build GradeSolution.sln -c Release --no-restore
 
       - name: Upload GradeSolution Artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-pages-artifact@v3
         with:
           name: GradeSolution-files
           path: .
@@ -54,12 +54,18 @@ jobs:
   deploy:
     needs: build
     runs-on: ubuntu-latest
+
+    permissions:
+      pages: write
+      id-token: write
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
     steps:
-      - name: Download GradeSolution Artifact
-        uses: actions/download-artifact@v4
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
         with:
-          name: GradeSolution-files
-          path: .
-          
-      - name: Deploy
-        run: echo "Deploy successful"
+            token: ${{ secrets.GITHUB_TOKEN }}
