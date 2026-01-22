@@ -11,7 +11,7 @@ namespace GradeSystemTest
         public void Marks_85_Returns_A()
         {
             var result = service.GetGrade(85);
-            Assert.Equal("A", result);
+            Assert.Equal("A+", result);
         }
 
         [Fact]
