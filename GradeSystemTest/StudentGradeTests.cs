@@ -11,21 +11,21 @@ namespace GradeSystemTest
         public void Marks_85_Returns_A()
         {
             var result = service.GetGrade(85);
-            Assert.Equal("A+", result);
+            Assert.Equal("A", result);
         }
 
         [Fact]
         public void Marks_65_Returns_B()
         {
             var result = service.GetGrade(65);
-            Assert.Equal("C", result);
+            Assert.Equal("B", result);
         }
 
         [Fact]
         public void Marks_45_Returns_C()
         {
             var result = service.GetGrade(45);
-            Assert.Equal("B", result);
+            Assert.Equal("C", result);
         }
 
         [Fact]
