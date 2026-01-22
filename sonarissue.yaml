@@ -18,6 +18,7 @@ jobs:
         with:
           fetch-depth: 0
 
+          #test
       # ✅ REQUIRED for .NET
       - name: Setup .NET 8
         uses: actions/setup-dotnet@v4
