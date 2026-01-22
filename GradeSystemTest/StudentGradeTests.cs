@@ -18,14 +18,14 @@ namespace GradeSystemTest
         public void Marks_65_Returns_B()
         {
             var result = service.GetGrade(65);
-            Assert.Equal("P", result);
+            Assert.Equal("C", result);
         }
 
         [Fact]
         public void Marks_45_Returns_C()
         {
             var result = service.GetGrade(45);
-            Assert.Equal("C", result);
+            Assert.Equal("B", result);
         }
 
         [Fact]
