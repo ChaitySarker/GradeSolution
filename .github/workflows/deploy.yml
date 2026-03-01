@@ -45,16 +45,28 @@ jobs:
           path: publish.zip
 
 
-  deploy:
-    needs: build
-    runs-on: windows-latest
+ deploy:
+  needs: build
+  runs-on: self-hosted
 
-    steps:
-      - uses: actions/download-artifact@v4
-        with:
-          name: app
+  steps:
+    - uses: actions/download-artifact@v4
+      with:
+        name: app
 
-      - name: Deploy to IIS using Web Deploy
-        shell: powershell
-        run: |
-          & "C:\Program Files\IIS\Microsoft Web Deploy V3\msdeploy.exe" -verb:sync -source:package="publish.zip" -dest:auto,computerName="${{ secrets.IIS_SERVER }}",userName="${{ secrets.IIS_USERNAME }}",password="${{ secrets.IIS_PASSWORD }}",authType="NTLM" -allowUntrusted
+    - name: Stop App Pool
+      run: |
+        Import-Module WebAdministration
+        Stop-WebAppPool -Name "AppCICD"
+
+    - name: Extract Files
+      run: |
+        Expand-Archive publish.zip -DestinationPath C:\deploy -Force
+
+    - name: Copy Files
+      run: |
+        Copy-Item C:\deploy\* C:\inetpub\wwwroot\AppCICD -Recurse -Force
+
+    - name: Start App Pool
+      run: |
+        Start-WebAppPool -Name "AppCICD"
