@@ -61,11 +61,11 @@ jobs:
 
     - name: Extract Files
       run: |
-        Expand-Archive publish.zip -DestinationPath C:\deploy -Force
+        Expand-Archive publish.zip -DestinationPath C:\SymphonySofttech\WebApp\Archive -Force
 
     - name: Copy Files
       run: |
-        Copy-Item C:\deploy\* C:\inetpub\wwwroot\AppCICD -Recurse -Force
+        Copy-Item C:\SymphonySofttech\WebApp\Archive\* C:\SymphonySofttech\WebApp\AppCICD -Recurse -Force
 
     - name: Start App Pool
       run: |
