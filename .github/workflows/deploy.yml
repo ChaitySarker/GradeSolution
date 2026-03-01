@@ -1,0 +1,65 @@
+name: Deploy to IIS
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - run: dotnet restore GradeSolution.sln
+      - run: dotnet test GradeSolution.sln -c Release
+
+  build:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - run: dotnet restore GradeSolution.sln
+
+      - name: Publish
+        run: dotnet publish GradeSolution.sln -c Release -o publish
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: publish-files
+          path: publish
+
+  deploy:
+    needs: build
+    runs-on: windows-latest
+
+    steps:
+      - name: Download Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: publish-files
+          path: publish
+
+      - name: Deploy to IIS using Web Deploy
+        run: |
+          "C:\Program Files\IIS\Microsoft Web Deploy V3\msdeploy.exe" ^
+          -verb:sync ^
+          -source:contentPath="publish" ^
+          -dest:contentPath="${{ secrets.IIS_SITE }}",
+          computerName="https://${{ secrets.IIS_SERVER }}:8172/msdeploy.axd",
+          userName="${{ secrets.IIS_USER }}",
+          password="${{ secrets.IIS_PASSWORD }}",
+          authType="Basic" ^
+          -allowUntrusted
