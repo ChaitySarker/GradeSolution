@@ -1,0 +1,60 @@
+name: Deploy to IIS
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+
+  test:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - run: dotnet restore GradeSolution.sln
+      - run: dotnet test GradeSolution.sln -c Release
+
+
+  build:
+    needs: test
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - run: dotnet restore GradeSolution.sln
+      - run: dotnet publish GradeSolution.sln -c Release -o publish
+
+      - name: Zip Publish Folder
+        run: Compress-Archive -Path publish\* -DestinationPath publish.zip
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: app
+          path: publish.zip
+
+
+  deploy:
+    needs: build
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: app
+
+      - name: Deploy to IIS using Web Deploy
+        shell: powershell
+        run: |
+          & "C:\Program Files\IIS\Microsoft Web Deploy V3\msdeploy.exe" -verb:sync -source:package="publish.zip" -dest:auto,computerName="${{ secrets.IIS_SERVER }}",userName="${{ secrets.IIS_USERNAME }}",password="${{ secrets.IIS_PASSWORD }}",authType="Basic" -allowUntrusted
