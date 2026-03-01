@@ -57,4 +57,4 @@ jobs:
       - name: Deploy to IIS using Web Deploy
         shell: powershell
         run: |
-          & "C:\Program Files\IIS\Microsoft Web Deploy V3\msdeploy.exe" -verb:sync -source:package="publish.zip" -dest:auto,computerName="${{ secrets.IIS_SERVER }}",userName="${{ secrets.IIS_USERNAME }}",password="${{ secrets.IIS_PASSWORD }}",authType="Basic" -allowUntrusted
+          & "C:\Program Files\IIS\Microsoft Web Deploy V3\msdeploy.exe" -verb:sync -source:package="publish.zip" -dest:auto,computerName="${{ secrets.IIS_SERVER }}",userName="${{ secrets.IIS_USERNAME }}",password="${{ secrets.IIS_PASSWORD }}",authType="NTLM" -allowUntrusted
